@@ -7,7 +7,7 @@
 
 ultralytics>=8.3.0          # YOLO training + inference
 opencv-python>=4.9.0
-numpy>=1.26,<2.0
+numpy>=1.26
 pyyaml>=6.0
 pydantic>=2.6               # typed config models
 

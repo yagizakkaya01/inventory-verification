@@ -9,8 +9,9 @@ Order matters — PyTorch must match the machine's CUDA before anything else.
    deps and the Jetson toolchain lag). `.\scripts\setup_env.ps1` creates `.venv`.
 3. **GPU check** — `nvidia-smi`. Note the CUDA version shown top-right.
 4. **PyTorch** — install matched to that CUDA from
-   <https://pytorch.org/get-started/locally/>, e.g.
-   `pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121`
+   <https://pytorch.org/get-started/locally/>.
+   This machine (RTX 4070 Laptop, driver CUDA 13.3 — forward-compatible):
+   `pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128`
 5. **Verify** — `python -c "import torch; print(torch.cuda.is_available())"` → `True`
 6. **Project deps** — `pip install -r requirements.txt`
 7. **Smoke test** — `python scripts\check_gpu.py` then `python scripts\smoke_test.py`
