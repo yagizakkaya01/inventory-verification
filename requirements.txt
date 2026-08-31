@@ -1,9 +1,10 @@
 # Core — install PyTorch SEPARATELY first, matched to your CUDA version:
 #   https://pytorch.org/get-started/locally/
-# e.g. CUDA 12.1:
-#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# this machine (RTX 4070 Laptop, driver CUDA 13.3):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
 #
 # Then:  pip install -r requirements.txt
+# (exact resolved versions: requirements-lock.txt)
 
 ultralytics>=8.3.0          # YOLO training + inference
 opencv-python>=4.9.0
@@ -11,16 +12,15 @@ numpy>=1.26
 pyyaml>=6.0
 pydantic>=2.6               # typed config models
 
-# --- Camera SDKs (install as needed per hardware) ---
-# depthai>=2.24              # OAK-D
-# openni                     # Orbbec Astra (or vendor SDK)
-# pyorbbecsdk                # Orbbec (newer SDK)
+# --- Camera SDKs ---
+depthai>=3.9                # OAK-D (v3 API — different from v2!)
+# openni                    # Orbbec Astra (or vendor SDK) — add if Astra is used
+# pyorbbecsdk               # Orbbec (newer SDK)
 
-# --- Edge export (optional, machine-dependent) ---
+# --- Edge export ---
+blobconverter>=1.4          # OAK-D .blob conversion (ONNX -> MyriadX)
 # onnx>=1.16
-# onnxruntime>=1.17
 # onnxruntime-gpu>=1.17
-# blobconverter>=1.4         # OAK-D .blob conversion
 # TensorRT: comes with JetPack on Jetson; on desktop install via NVIDIA
 
 # --- Dev ---

@@ -1,11 +1,14 @@
 # Runtime pipeline + state-logic config. Consumed by src/pipeline/run.py.
 
 source:
-  type: webcam            # webcam | oakd | astra | video
-  index: 0               # webcam index, or path for `video`
+  type: oakd             # webcam | oakd | astra | video
+  index: 0               # webcam index, or path for `video` (ignored for oakd)
   width: 1280
   height: 720
   fps: 30
+  # NOTE: OAK-D currently links at USB2 speed. The oakd source requests NV12,
+  # which holds 1280x720@30 anyway. Use the USB3 cable/port before enabling
+  # depth (stereo adds bandwidth).
 
 detection:
   weights: models/checkpoints/exp/weights/best.pt

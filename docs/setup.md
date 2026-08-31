@@ -16,12 +16,22 @@ Order matters — PyTorch must match the machine's CUDA before anything else.
 6. **Project deps** — `pip install -r requirements.txt`
 7. **Smoke test** — `python scripts\check_gpu.py` then `python scripts\smoke_test.py`
 
-## Camera SDKs (add when the hardware is in hand)
+## Camera SDKs
+
+Primary camera is the **OAK-D**. `depthai` (v3) + `blobconverter` are in
+`requirements.txt`; the device is verified working (`_oakd_source` in
+`src/pipeline/sources.py`, DepthAI **v3** API — not v2).
+
+Check it any time with:
+
+```powershell
+python -c "import depthai as dai; print(dai.Device.getAllAvailableDevices())"
+```
 
 | Device | Package | Notes |
 |--------|---------|-------|
-| OAK-D | `pip install depthai` | also `blobconverter` for `.blob` export |
-| Orbbec Astra | OpenNI2 / `pyorbbecsdk` | vendor SDK + Python bindings |
+| OAK-D | `depthai>=3.9`, `blobconverter` | **installed & verified.** Enumerates at USB2 (HIGH) — use the USB3 cable + blue port for full bandwidth |
+| Orbbec Astra | OpenNI2 / `pyorbbecsdk` | fallback only, not installed |
 | Endoscope / USB | none | plain `cv2.VideoCapture` |
 
 ## Jetson Nano (separate machine)

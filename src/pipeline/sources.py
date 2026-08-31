@@ -1,8 +1,7 @@
 """Frame sources. Each yields BGR numpy frames.
 
-Only the webcam/video path (OpenCV) is implemented now. OAK-D and Astra are
-stubbed with the SDK entry points noted so they can be filled in on the office
-hardware.
+webcam/video (OpenCV) and oakd (DepthAI v3) are implemented. Astra is stubbed
+with the SDK entry point noted.
 """
 
 from __future__ import annotations
@@ -42,9 +41,31 @@ def _opencv_source(cfg: SourceCfg) -> Iterator:
 
 
 def _oakd_source(cfg: SourceCfg) -> Iterator:
-    # TODO: build a depthai.Pipeline with a ColorCamera -> XLinkOut("rgb"),
-    # then loop on device.getOutputQueue("rgb").get().getCvFrame()
-    raise NotImplementedError("OAK-D source: implement with `depthai` on the device")
+    """RGB stream from an OAK-D via the DepthAI v3 API (CAM_A / color sensor).
+
+    Runs detection on the *host* (our YOLO model on the RTX 4070). To move
+    detection onto the camera's VPU instead, add a `dai.node.DetectionNetwork`
+    fed by a compiled `.blob` (see src/edge/export_blob.py) and yield its
+    results rather than raw frames.
+    """
+    import depthai as dai
+
+    with dai.Pipeline() as pipeline:
+        cam = pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_A)
+        # Request NV12 (YUV420) not BGR888i: ~1/2 the USB bandwidth, so 720p@30
+        # holds even on a USB2 link. getCvFrame() converts to BGR host-side.
+        out = cam.requestOutput(
+            (cfg.width, cfg.height), dai.ImgFrame.Type.NV12, fps=cfg.fps
+        )
+        # Non-blocking, shallow queue: always process the newest frame and drop
+        # any the detector was too slow to consume (real-time > completeness).
+        queue = out.createOutputQueue(maxSize=4, blocking=False)
+        pipeline.start()
+        # First frame can take a few seconds on a USB2 link (sensor init +
+        # autoexposure); steady state is ~30 FPS at 720p NV12.
+        while pipeline.isRunning():
+            frame = queue.get()
+            yield frame.getCvFrame()
 
 
 def _astra_source(cfg: SourceCfg) -> Iterator:
