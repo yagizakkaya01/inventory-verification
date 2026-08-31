@@ -47,3 +47,7 @@ lightning_logs/
 
 # --- Benchmark artifacts ---
 benchmarks/results/
+
+# --- Personal scratch / side projects (not part of this repo) ---
+opencv test/
+tattoo-stencil-maker/
