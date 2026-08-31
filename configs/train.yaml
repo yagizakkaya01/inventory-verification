@@ -1,0 +1,26 @@
+# Training hyperparameters for the detection model.
+# Consumed by src/detection/train.py. Mirrors Ultralytics arg names.
+
+model: yolov8n.pt          # pretrained base for transfer learning (n = nano, edge-friendly)
+data: configs/data.yaml
+epochs: 100
+imgsz: 640
+batch: 16                  # lower if GPU OOM
+patience: 25               # early-stop patience
+device: 0                  # 0 = first GPU, 'cpu' to force CPU
+workers: 8
+seed: 42
+project: models/checkpoints
+name: exp
+
+# Augmentation — scene is a fixed camera, so keep geometry mild but vary
+# lighting/color aggressively. Occlusion handled via mosaic + real data.
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+degrees: 5.0
+translate: 0.1
+scale: 0.3
+fliplr: 0.0               # left/right flip changes "order" semantics — keep off
+flipud: 0.0
+mosaic: 1.0

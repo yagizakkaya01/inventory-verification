@@ -1,0 +1,49 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+
+# --- Environments / secrets ---
+.env
+*.local
+
+# --- Editors ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# --- Notebooks ---
+.ipynb_checkpoints/
+
+# --- Data (tracked via DVC/Roboflow, not git) ---
+data/raw/
+data/interim/
+data/datasets/
+!data/**/.gitkeep
+
+# --- Models / weights / exports ---
+models/pretrained/
+models/checkpoints/
+models/exported/
+*.pt
+*.onnx
+*.engine
+*.blob
+!models/**/.gitkeep
+
+# --- Training / experiment outputs ---
+runs/
+wandb/
+lightning_logs/
+*.log
+
+# --- Benchmark artifacts ---
+benchmarks/results/

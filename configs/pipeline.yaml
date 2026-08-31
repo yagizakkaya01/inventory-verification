@@ -1,0 +1,33 @@
+# Runtime pipeline + state-logic config. Consumed by src/pipeline/run.py.
+
+source:
+  type: webcam            # webcam | oakd | astra | video
+  index: 0               # webcam index, or path for `video`
+  width: 1280
+  height: 720
+  fps: 30
+
+detection:
+  weights: models/checkpoints/exp/weights/best.pt
+  conf: 0.35
+  iou: 0.5
+  imgsz: 640
+  device: 0
+
+# Temporal smoothing: a detection state must hold for `window` consecutive
+# frames (with at least `min_agree` agreeing) before it is accepted.
+smoothing:
+  window: 8
+  min_agree: 6
+
+# Expected scene definition. The verifier compares the smoothed observation
+# against this and emits OK / MISSING / WRONG_ORDER / WRONG_COMBINATION.
+expected:
+  # ordered left-to-right by object centroid x
+  sequence: [item_a, item_b, item_c]
+  # tolerance for "same row" grouping, fraction of frame height
+  row_tolerance: 0.15
+
+output:
+  draw: true             # overlay boxes + verdict
+  log_path: runs/pipeline.log

@@ -1,0 +1,1 @@
+"""Inventory / state verification system."""

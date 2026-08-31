@@ -1,0 +1,13 @@
+[project]
+name = "inventory-verification"
+version = "0.1.0"
+description = "Edge AI inventory / state verification: YOLO detection + state machine"
+requires-python = ">=3.10,<3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
