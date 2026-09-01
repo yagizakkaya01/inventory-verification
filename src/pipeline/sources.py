@@ -58,13 +58,21 @@ def _oakd_source(cfg: SourceCfg) -> Iterator:
             (cfg.width, cfg.height), dai.ImgFrame.Type.NV12, fps=cfg.fps
         )
         # Non-blocking, shallow queue: always process the newest frame and drop
-        # any the detector was too slow to consume (real-time > completeness).
+        # any the consumer was too slow to take (real-time > completeness).
         queue = out.createOutputQueue(maxSize=4, blocking=False)
         pipeline.start()
         # First frame can take a few seconds on a USB2 link (sensor init +
         # autoexposure); steady state is ~30 FPS at 720p NV12.
-        while pipeline.isRunning():
+        #
+        # Two things matter for throughput on a USB2 link:
+        #  - don't call pipeline.isRunning() in the loop: it does an XLink
+        #    round-trip that competes with the video stream and tanks the FPS;
+        #  - drain the queue every iteration so we stay on the live frame,
+        #    otherwise work between get() calls lets frames back up and choke.
+        while True:
             frame = queue.get()
+            while (newer := queue.tryGet()) is not None:
+                frame = newer
             yield frame.getCvFrame()
 
 
