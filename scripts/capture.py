@@ -1,8 +1,8 @@
 """OAK-D ile eğitim verisi toplama aracı.
 
 Kullanım:
-    python -m scripts.capture --labels ok
-    python -m scripts.capture --labels ok,missing_pistol,missing_rifle,wrong_order
+    python scripts/capture.py
+    python scripts/capture.py --labels ok,eksik_malzeme,yanlis_sira
 
 Canlı önizleme açılır. Tuşlar:
     SPACE   tek kare kaydet
@@ -23,6 +23,10 @@ from datetime import date
 from pathlib import Path
 
 import cv2
+import sys
+
+# Add the project root to sys.path so 'src' can be imported when running directly
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from src.pipeline.sources import open_source
 from src.utils.config import SourceCfg
@@ -34,9 +38,10 @@ def main() -> None:
     p = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    p.add_argument("--labels", default="unlabeled",
+    p.add_argument("--labels", default="ok,eksik_malzeme,yanlis_sira",
                    help="virgülle ayrılmış senaryo etiketleri")
-    p.add_argument("--out", default="data/raw", help="kök çıktı klasörü")
+    p.add_argument("--out", default=None,
+                   help="kök çıktı klasörü (varsayılan: <repo>/data/raw)")
     p.add_argument("--interval", type=float, default=1.5,
                    help="sürekli çekimde saniye aralığı")
     p.add_argument("--res", default="1280x720",
@@ -48,8 +53,10 @@ def main() -> None:
     labels = [s.strip() for s in args.labels.split(",") if s.strip()] or ["unlabeled"]
     li = 0
 
+    repo_root = Path(__file__).resolve().parent.parent
+    out_dir = Path(args.out) if args.out else repo_root / "data" / "raw"
     session = date.today().isoformat()
-    root = Path(args.out) / session
+    root = out_dir / session
 
     def count(label: str) -> int:
         d = root / label
@@ -62,7 +69,7 @@ def main() -> None:
     total = 0
 
     print(f"Oturum: {session}   etiketler: {labels}")
-    print("SPACE=kaydet  c=sürekli  [ ]=etiket  u=geri al  q=çık")
+    print("SPACE=kaydet  c=sürekli  t=etiket değiştir  u=geri al  q=çık")
 
     frames = open_source(cfg)
     try:
@@ -91,10 +98,9 @@ def main() -> None:
             elif key == ord("c"):
                 auto = not auto
                 last_auto = now
-            elif key == ord("["):
-                li = (li - 1) % len(labels)
-            elif key == ord("]"):
+            elif key == ord("t"):
                 li = (li + 1) % len(labels)
+                print(f"Aktif etiket: {labels[li]}")
             elif key == ord("u"):
                 if last_saved and last_saved.exists():
                     last_saved.unlink()
