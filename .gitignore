@@ -52,3 +52,4 @@ benchmarks/results/
 opencv test/
 tattoo-stencil-maker/
 Anomaly Detection/
+.venv-ls/
