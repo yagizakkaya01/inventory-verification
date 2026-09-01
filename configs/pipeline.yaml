@@ -11,9 +11,9 @@ source:
   # depth (stereo adds bandwidth).
 
 detection:
-  weights: models/checkpoints/exp/weights/best.pt
+  weights: models/checkpoints/inventory-yolo11s/weights/best.pt
   conf: 0.35
-  iou: 0.5
+  iou: 0.6
   imgsz: 640
   device: 0
 
@@ -26,8 +26,8 @@ smoothing:
 # Expected scene definition. The verifier compares the smoothed observation
 # against this and emits OK / MISSING / WRONG_ORDER / WRONG_COMBINATION.
 expected:
-  # ordered left-to-right by object centroid x
-  sequence: [item_a, item_b, item_c]
+  # ordered left-to-right by object centroid x (the "ok" layout)
+  sequence: [tufek, tabanca, sarjor]
   # tolerance for "same row" grouping, fraction of frame height
   row_tolerance: 0.15
 

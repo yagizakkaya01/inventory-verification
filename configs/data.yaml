@@ -1,8 +1,5 @@
-# Ultralytics dataset config (YOLO format).
-# Paths are relative to this repo root (Ultralytics resolves against `path`).
-#
-# Class names are FUNCTIONAL / NEUTRAL on purpose — they describe the role in
-# the verification task, not the physical object. Adjust once objects are fixed.
+# Ultralytics dataset config (YOLO format). Built by scripts/build_dataset.py
+# from the Label Studio annotations. Paths resolve against `path`.
 
 path: data/datasets/inventory
 train: images/train
@@ -10,6 +7,6 @@ val: images/val
 test: images/test
 
 names:
-  0: item_a
-  1: item_b
-  2: item_c
+  0: tufek
+  1: tabanca
+  2: sarjor
