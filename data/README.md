@@ -1,28 +1,28 @@
 # data/
 
-Everything here except this file is gitignored — images/labels are managed in
-Roboflow and pulled down, not committed.
+Gitignored (images are large). See **[docs/dataset.md](../docs/dataset.md)** for
+the download link and details.
 
 ```
-raw/         original captures, untouched (organize by session: raw/2026-09-01/)
-interim/     cleaned / deduplicated / renamed, pre-labeling
-datasets/    YOLO-format export, ready for training
+raw/         original captures, by session (raw/2026-09-01/<scenario>/)
+interim/     scratch space, pre-labeling
+datasets/    YOLO-format dataset, ready for training
   inventory/
     images/{train,val,test}/
     labels/{train,val,test}/
-    data.yaml            # (or use the repo's configs/data.yaml)
+    data.yaml
 ```
 
 ## Workflow
 
-1. Capture into `raw/<date>/`.
-2. Upload to Roboflow, label (model-assisted once the 50-image model exists).
-3. Export as **YOLOv8** format, 70/20/10 train/val/test, into
-   `datasets/inventory/`.
-4. Keep `configs/data.yaml` pointing at it.
+1. Capture into `raw/<date>/<scenario>/` with `scripts/capture.py`.
+2. Label in Label Studio (bootstrap ~50 by hand → `scripts/ls_prelabel.py` /
+   `ls_autoaccept.py` for the rest → review).
+3. `python -m scripts.build_dataset` → writes `datasets/inventory/`.
+4. `configs/data.yaml` already points at it.
 
 ## Split discipline
 
-Split by **capture session / arrangement**, not by random frame — frames from
-one continuous recording are near-duplicates and will leak between train and
-val, inflating mAP.
+`build_dataset.py` splits **per scenario, in capture-timestamp order** — never
+random. Frames from one continuous burst are near-duplicates; a random split
+leaks them between train and val/test and inflates mAP.
