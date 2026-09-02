@@ -16,6 +16,11 @@ Output per confirmed frame window: `OK` or a typed error.
 
 ▶️ **https://www.youtube.com/watch?v=sU56IWzHs5M**
 
+![verdicts](docs/images/verdicts.jpg)
+
+<sub>Detector output + verdict, one frame per scenario. Boxes are the fine-tuned
+YOLO11s; the banner is the state layer's decision.</sub>
+
 ## Architecture
 
 Two layers:
