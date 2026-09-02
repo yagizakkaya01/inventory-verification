@@ -12,7 +12,7 @@ source:
 
 detection:
   weights: models/checkpoints/inventory-yolo11s/weights/best.pt
-  conf: 0.35
+  conf: 0.30
   iou: 0.6
   imgsz: 640
   device: 0
