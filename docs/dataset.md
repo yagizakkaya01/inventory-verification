@@ -23,8 +23,11 @@ data/datasets/inventory/
 | Negatives | 14 empty frames with empty label files |
 
 Capture: fixed top-down OAK-D over a white sheet, replica objects, via
-`scripts/capture.py`. Labelling: Label Studio — ~50 frames by hand, the rest
-model-assisted (`scripts/ls_prelabel.py` / `ls_autoaccept.py`) then reviewed.
+`scripts/capture.py`. Labelling: **[Label Studio][ls]** — ~50 frames by hand,
+the rest model-assisted (`scripts/ls_prelabel.py` / `ls_autoaccept.py`) then
+reviewed. Full workflow in [labeling.md](labeling.md).
+
+[ls]: https://github.com/HumanSignal/label-studio
 
 The rifle's **attached** magazine is intentionally not labelled `sarjor`;
 `sarjor` is only the standalone magazine the system tracks as its own item.

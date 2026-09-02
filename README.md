@@ -63,11 +63,12 @@ but not classified as `wrong_combination` specifically.
 
 ## Dataset
 
-452 images captured with the OAK-D (`scripts/capture.py`), labelled in Label
-Studio with a bootstrap loop: ~50 frames by hand → train a small model →
-`scripts/ls_prelabel.py` pre-annotates the rest → human review. Split per
+452 images captured with the OAK-D (`scripts/capture.py`), labelled in
+**[Label Studio](https://github.com/HumanSignal/label-studio)** with a bootstrap
+loop: ~50 frames by hand → train a small model → `scripts/ls_prelabel.py`
+pre-annotates the rest in Label Studio → review the pre-filled boxes. Split per
 scenario in capture-timestamp order so continuous-capture bursts don't leak
-between train and test.
+between train and test. Full workflow: [docs/labeling.md](docs/labeling.md).
 
 Dataset + trained weights: **[dataset-v1 release][rel]**. Details:
 [docs/dataset.md](docs/dataset.md).
@@ -124,3 +125,12 @@ docs/        plan · setup · scenarios · metrics · dataset
 
 Timeline and design notes: [docs/plan.md](docs/plan.md),
 [docs/scenarios.md](docs/scenarios.md), [docs/metrics.md](docs/metrics.md).
+
+## Built with
+
+- [Ultralytics YOLO11](https://github.com/ultralytics/ultralytics) — detector
+- [Label Studio](https://github.com/HumanSignal/label-studio) (HumanSignal) —
+  annotation; the bootstrap loop in [docs/labeling.md](docs/labeling.md) drives
+  it from `scripts/`
+- [DepthAI](https://github.com/luxonis/depthai) (Luxonis) — OAK-D camera
+- OpenCV · PyTorch
