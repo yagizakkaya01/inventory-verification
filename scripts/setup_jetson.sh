@@ -11,14 +11,14 @@ echo " Setting up Inventory Verification for Jetson Nano   "
 echo " (JetPack 4.6.4, L4T 32.7.4, CUDA 10.2)              "
 echo "====================================================="
 
-# 1. Install Python 3.8 and pip
+# 1. Install Python 3.8 and dependencies
 echo -e "\n--- Installing Python 3.8 ---"
 sudo apt-get update
 sudo apt-get install -y software-properties-common
 sudo add-apt-repository -y ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get install -y python3.8 python3.8-dev python3.8-venv python3.8-distutils libpython3.8-dev
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+curl https://bootstrap.pypa.io/pip/3.8/get-pip.py -o get-pip.py
 sudo python3.8 get-pip.py
 rm get-pip.py
 
