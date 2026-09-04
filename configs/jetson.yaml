@@ -1,5 +1,5 @@
-# Runtime pipeline + state-logic config for Jetson.
-# Consumed by src/pipeline/run.py.
+# Runtime pipeline config for Jetson Nano (JetPack 4.6.4, TensorRT FP16).
+# Consumed by src/pipeline/run_jetson.py (NOT by run.py).
 
 source:
   type: oakd
@@ -9,7 +9,7 @@ source:
   fps: 30
 
 detection:
-  # Use the exported TensorRT engine for Jetson GPU inference
+  # TensorRT engine built on the Jetson via trtexec (FP16)
   weights: models/checkpoints/inventory-yolo11s/weights/best.engine
   conf: 0.30
   iou: 0.6

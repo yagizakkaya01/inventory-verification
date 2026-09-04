@@ -1,0 +1,9 @@
+# Requirements for Jetson Nano (JetPack 4.6.4, Python 3.6)
+# TensorRT, CUDA, pycuda come pre-installed with JetPack.
+# PyTorch is NOT needed at runtime (we use native TensorRT).
+
+opencv-python>=4.1.0
+numpy>=1.19
+pyyaml>=5.3
+depthai                    # OAK-D camera (v2 API on JetPack 4.6)
+pycuda                     # CUDA memory management for TensorRT

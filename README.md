@@ -101,20 +101,33 @@ expected layout.
 
 ## Jetson Deployment (JetPack 4.6.4)
 
-To deploy the project natively on a Jetson Nano (JetPack 4.6.4), you need Python 3.8 and a community-built PyTorch wheel, as JetPack 4.6.4 defaults to Python 3.6. We provide a setup script for this.
+Deploys using the Jetson Nano's **native TensorRT** (FP16) with the system
+Python 3.6 — no PyTorch or Ultralytics needed on the device.
 
+**On your Windows PC** — export to ONNX (already done if you have `best.onnx`):
+```powershell
+python -m src.edge.export_onnx --weights models\checkpoints\inventory-yolo11s\weights\best.pt --simplify
+```
+
+**On the Jetson Nano:**
 ```bash
-# 1. Run the Jetson setup script to install Python 3.8 and dependencies
+# 1. Clone the repo and run the setup script
+git clone https://github.com/yagizakkaya01/inventory-verification.git
+cd inventory-verification
 bash scripts/setup_jetson.sh
 
-# 2. Activate the virtual environment
-source .venv-jetson/bin/activate
+# 2. Copy best.onnx from your PC into the weights folder
+#    (use scp, USB stick, etc.)
+mkdir -p models/checkpoints/inventory-yolo11s/weights/
 
-# 3. Export the YOLO model to a TensorRT engine (must run ON the Jetson)
-python -m src.edge.export_trt --weights models/checkpoints/inventory-yolo11s/weights/best.pt --half
+# 3. Build the TensorRT FP16 engine (runs on the Jetson GPU — takes a few minutes)
+/usr/src/tensorrt/bin/trtexec \
+  --onnx=models/checkpoints/inventory-yolo11s/weights/best.onnx \
+  --saveEngine=models/checkpoints/inventory-yolo11s/weights/best.engine \
+  --fp16
 
-# 4. Run the live pipeline using the Jetson config
-python -m src.pipeline.run --config configs/jetson.yaml
+# 4. Run the live pipeline
+python3 -m src.pipeline.run_jetson --config configs/jetson.yaml
 ```
 
 ## Repository layout
