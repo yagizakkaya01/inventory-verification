@@ -1,0 +1,29 @@
+# Runtime pipeline + state-logic config for Jetson.
+# Consumed by src/pipeline/run.py.
+
+source:
+  type: oakd
+  index: 0
+  width: 1280
+  height: 720
+  fps: 30
+
+detection:
+  # Use the exported TensorRT engine for Jetson GPU inference
+  weights: models/checkpoints/inventory-yolo11s/weights/best.engine
+  conf: 0.30
+  iou: 0.6
+  imgsz: 640
+  device: 0
+
+smoothing:
+  window: 8
+  min_agree: 6
+
+expected:
+  sequence: [tufek, tabanca, sarjor]
+  row_tolerance: 0.15
+
+output:
+  draw: true
+  log_path: runs/pipeline_jetson.log

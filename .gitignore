@@ -51,3 +51,6 @@ benchmarks/results/
 # --- Separate projects that may sit alongside this one ---
 Anomaly Detection/
 .venv-ls/
+
+# Claude Desktop generated outputs (not repo source)
+Claude outputs/

@@ -99,6 +99,24 @@ python -m scripts.eval_system --split test
 `configs/pipeline.yaml` sets the source, model, smoothing window and the
 expected layout.
 
+## Jetson Deployment (JetPack 4.6.4)
+
+To deploy the project natively on a Jetson Nano (JetPack 4.6.4), you need Python 3.8 and a community-built PyTorch wheel, as JetPack 4.6.4 defaults to Python 3.6. We provide a setup script for this.
+
+```bash
+# 1. Run the Jetson setup script to install Python 3.8 and dependencies
+bash scripts/setup_jetson.sh
+
+# 2. Activate the virtual environment
+source .venv-jetson/bin/activate
+
+# 3. Export the YOLO model to a TensorRT engine (must run ON the Jetson)
+python -m src.edge.export_trt --weights models/checkpoints/inventory-yolo11s/weights/best.pt --half
+
+# 4. Run the live pipeline using the Jetson config
+python -m src.pipeline.run --config configs/jetson.yaml
+```
+
 ## Repository layout
 
 ```
